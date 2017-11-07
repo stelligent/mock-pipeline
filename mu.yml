@@ -6,22 +6,283 @@ service:
       disabled: true
     production:
       disabled: true
-
 templates:
+  mu-iam-pipeline-mock-pipeline:
+    Resources:
+      ## Grant the pipeline access to call Lambda
+      CodePipelineLambdaPolicy:
+        Type: AWS::IAM::Policy
+        Properties:
+          PolicyName: CodePipelineLambdaPolicy
+          PolicyDocument:
+            Statement:
+            - Action:
+              - lambda:*
+              Resource: "*"
+              Effect: Allow
+          Roles:
+          - Ref: CodePipelineRole
+
+      ## Create a role for the Lambda function
+      CodePipelineLambdaRole:
+        Type: AWS::IAM::Role
+        Properties:
+          RoleName: 
+            Fn::Sub: ${Namespace}-pipeline-mock-lambda-role-${AWS::Region}
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                - lambda.amazonaws.com
+              Action:
+              - sts:AssumeRole
+          Path: "/"
+          Policies:
+            - PolicyName: LambdaRolePolicy
+              PolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                - Effect: Allow
+                  Action:
+                  - logs:*
+                  Resource:
+                  - arn:aws:logs:*:*:*
+                - Effect: Allow
+                  Action:
+                  - codepipeline:PutJobSuccessResult
+                  - codepipeline:PutJobFailureResult
+                  Resource:
+                  - "*"
+
   mu-pipeline-mock-pipeline:
     Resources:
+      ## Create dummy lambda function
+      CodePipelineLambdaDummy:
+        Type: AWS::Lambda::Function
+        Properties:
+          Code: 
+            ZipFile: |
+              var AWS = require('aws-sdk');
+
+              exports.handler = function(event, context) {
+                  new AWS.CodePipeline().putJobSuccessResult(
+                    { jobId: event["CodePipeline.job"].id},
+                    function(err, data) {
+                          if(err) {
+                              context.fail(err);      
+                          } else {
+                              context.succeed("test passed");      
+                          }
+                      });
+              };
+          Role:
+            Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/${Namespace}-pipeline-mock-lambda-role-${AWS::Region}
+          Description: Always return success
+          Timeout: 20
+          Handler: index.handler
+          Runtime: nodejs4.3
+          MemorySize: 128
+
+      ## Add extra stages to pipeline
       Pipeline:
         Properties:
           Stages:
             - Name: AcceptanceTesting
-              Actions: 
+              Actions:
               - Name: ProvisionEnvironment
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
                 RunOrder: 1
+              - Name: InfrastructureAnalysis
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 1
+              - Name: ConfigureEnvironment
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 2
+              - Name: AcceptanceTests
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 3
+              - Name: IntegrationTests
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 3
+              - Name: DeployApp
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 4
+              - Name: DeploymentTest
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 5
+            - Name: Capacity
+              Actions:
+              - Name: PenTest
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 1
+              - Name: PerformanceTest
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 1
+              - Name: ImageTests
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 1
+              - Name: ResiliencyTests
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 1
+            - Name: ExploratoryTesting
+              Actions:
+              - Name: QA
                 ActionTypeId:
                   Category: Approval
                   Owner: AWS
                   Version: '1'
                   Provider: Manual
                 Configuration:
-                  CustomData: Approval or Reject this change after provisioning test environment
-
+                  CustomData: Approval or Reject this change after running Exploratory Tests
+                RunOrder: 1
+            - Name: Production
+              Actions:
+              - Name: BlueGreenDeployment
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 1
+              - Name: OutofBandTests
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 1
+              - Name: SecurityMetrics
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 1
+              - Name: SwitchEndPoints
+                ActionTypeId:
+                  Category: Invoke
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Lambda
+                Configuration:
+                  FunctionName:
+                    Ref: CodePipelineLambdaDummy
+                  UserParameters:
+                    Ref: AWS::StackName
+                RunOrder: 2
