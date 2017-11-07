@@ -6,3 +6,22 @@ service:
       disabled: true
     production:
       disabled: true
+
+templates:
+  mu-pipeline-mock-pipeline:
+    Resources:
+      Pipeline:
+        Properties:
+          Stages:
+            - Name: AcceptanceTesting
+              Actions: 
+              - Name: ProvisionEnvironment
+                RunOrder: 1
+                ActionTypeId:
+                  Category: Approval
+                  Owner: AWS
+                  Version: '1'
+                  Provider: Manual
+                Configuration:
+                  CustomData: Approval or Reject this change after provisioning test environment
+
