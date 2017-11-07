@@ -7,57 +7,10 @@ service:
       disabled: true
 
 templates:
-  mu-iam-pipeline-mock-pipeline:
-    Resources:
-      ## Grant the pipeline access to call Lambda
-      CodePipelineLambdaPolicy:
-        Type: AWS::IAM::Policy
-        Properties:
-          PolicyName: CodePipelineLambdaPolicy
-          PolicyDocument:
-            Statement:
-            - Action:
-              - lambda:*
-              Resource: "*"
-              Effect: Allow
-          Roles:
-          - Ref: CodePipelineRole
-
-      ## Create a role for the Lambda function
-      CodePipelineLambdaRole:
-        Type: AWS::IAM::Role
-        Properties:
-          RoleName: 
-            Fn::Sub: ${Namespace}-pipeline-mock-lambda-role-${AWS::Region}
-          AssumeRolePolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-            - Effect: Allow
-              Principal:
-                Service:
-                - lambda.amazonaws.com
-              Action:
-              - sts:AssumeRole
-          Path: "/"
-          Policies:
-            - PolicyName: LambdaRolePolicy
-              PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                - Effect: Allow
-                  Action:
-                  - logs:*
-                  Resource:
-                  - arn:aws:logs:*:*:*
-                - Effect: Allow
-                  Action:
-                  - codepipeline:PutJobSuccessResult
-                  - codepipeline:PutJobFailureResult
-                  Resource:
-                  - "*"
 
   mu-pipeline-mock-pipeline:
     Resources:
+
       ## Create dummy lambda function
       CodePipelineLambdaDummy:
         Type: AWS::Lambda::Function
@@ -281,3 +234,52 @@ templates:
                   UserParameters:
                     Ref: AWS::StackName
                 RunOrder: 2
+
+  mu-iam-pipeline-mock-pipeline:
+    Resources:
+      ## Grant the pipeline access to call Lambda
+      CodePipelineLambdaPolicy:
+        Type: AWS::IAM::Policy
+        Properties:
+          PolicyName: CodePipelineLambdaPolicy
+          PolicyDocument:
+            Statement:
+            - Action:
+              - lambda:*
+              Resource: "*"
+              Effect: Allow
+          Roles:
+          - Ref: CodePipelineRole
+
+      ## Create a role for the Lambda function
+      CodePipelineLambdaRole:
+        Type: AWS::IAM::Role
+        Properties:
+          RoleName: 
+            Fn::Sub: ${Namespace}-pipeline-mock-lambda-role-${AWS::Region}
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                - lambda.amazonaws.com
+              Action:
+              - sts:AssumeRole
+          Path: "/"
+          Policies:
+            - PolicyName: LambdaRolePolicy
+              PolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                - Effect: Allow
+                  Action:
+                  - logs:*
+                  Resource:
+                  - arn:aws:logs:*:*:*
+                - Effect: Allow
+                  Action:
+                  - codepipeline:PutJobSuccessResult
+                  - codepipeline:PutJobFailureResult
+                  Resource:
+                  - "*"
