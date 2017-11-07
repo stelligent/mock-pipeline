@@ -6,12 +6,22 @@ service:
     production:
       disabled: true
 
-templates:
 
+
+
+
+#####
+## Override cloudformation that mu generates 
+#####
+
+templates:
   mu-pipeline-mock-pipeline:
     Resources:
 
+      #####
       ## Create dummy lambda function
+      #####
+
       CodePipelineLambdaDummy:
         Type: AWS::Lambda::Function
         Properties:
@@ -33,7 +43,10 @@ templates:
           Runtime: nodejs6.10
           MemorySize: 128
 
+      #####
       ## Add extra stages to pipeline
+      #####
+
       Pipeline:
         Properties:
           Stages:
@@ -237,7 +250,11 @@ templates:
 
   mu-iam-pipeline-mock-pipeline:
     Resources:
+
+      #####
       ## Grant the pipeline access to call Lambda
+      #####
+
       CodePipelineLambdaPolicy:
         Type: AWS::IAM::Policy
         Properties:
@@ -251,7 +268,10 @@ templates:
           Roles:
           - Ref: CodePipelineRole
 
+      #####
       ## Create a role for the Lambda function
+      #####
+
       CodePipelineLambdaRole:
         Type: AWS::IAM::Role
         Properties:
