@@ -1,11 +1,11 @@
 
 service:
-  name: mock-pipeline
   pipeline:
     acceptance:
       disabled: true
     production:
       disabled: true
+
 templates:
   mu-iam-pipeline-mock-pipeline:
     Resources:
@@ -65,24 +65,19 @@ templates:
           Code: 
             ZipFile: |
               var AWS = require('aws-sdk');
-
-              exports.handler = function(event, context) {
-                  new AWS.CodePipeline().putJobSuccessResult(
-                    { jobId: event["CodePipeline.job"].id},
-                    function(err, data) {
-                          if(err) {
-                              context.fail(err);      
-                          } else {
-                              context.succeed("test passed");      
-                          }
-                      });
+              exports.handler = function(event, context, callback) {
+                  new AWS.CodePipeline()
+                    .putJobSuccessResult({ jobId: event["CodePipeline.job"].id})
+                    .promise()
+                    .then(() => callback(null, "success"))
+                    .catch(callback);
               };
           Role:
             Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/${Namespace}-pipeline-mock-lambda-role-${AWS::Region}
           Description: Always return success
           Timeout: 20
           Handler: index.handler
-          Runtime: nodejs4.3
+          Runtime: nodejs6.10
           MemorySize: 128
 
       ## Add extra stages to pipeline
