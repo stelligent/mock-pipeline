@@ -1,0 +1,10 @@
+
+service:
+  name: mock-pipeline
+  pipeline:
+    build:
+      disabled: true
+    acceptance:
+      disabled: true
+    production:
+      disabled: true
