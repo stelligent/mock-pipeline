@@ -5,13 +5,12 @@ Use Mock Pipeline to model [value stream maps](https://en.wikipedia.org/wiki/Val
 To see a video describing Mock Pipeline, see [Technological Accelerants for Organizational Transformation](https://www.youtube.com/watch?v=42gDK3MDuJI&feature=youtu.be&t=1647).
 
 ## Cloud9
+These instructions assume you're using AWS Cloud9. Adapt the instructions if you're using a different IDE. 
 
 ```
 sudo su
 sudo curl -s https://getmu.io/install.sh | sh
 ```
-
-This repo creates a mock pipeline with [mu](https://getmu.io) similar to the Stelligent blog post [Mocking AWS CodePipeline pipelines with Lambda](https://stelligent.com/2016/02/15/mocking-aws-codepipeline-pipelines-with-lambda/).
 
 To create this pipeline in your account, run: `mu pipeline up`
 
