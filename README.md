@@ -7,7 +7,7 @@ For a description of the purpose of Mock Pipeline, see [Technological Accelerant
 ## Setup
 These instructions assume you're using [AWS Cloud9](https://aws.amazon.com/cloud9/). Adapt the instructions if you're using a different IDE.
 
-[Fork](https://help.github.com/en/articles/fork-a-repo). this repo: https://github.com/stelligent/mock-pipeline
+[Fork](https://help.github.com/en/articles/fork-a-repo) this repo: https://github.com/stelligent/mock-pipeline
 
 From Cloud 9, clone the newly forked repo (replacing `USERNAME` in the example.
 
