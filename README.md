@@ -18,7 +18,7 @@ sudo su
 sudo curl -s https://getmu.io/install.sh | sh
 ```
 
-Make any modificiations to your local `mu.yml` file for the stages and actions you want to model. Commit them to your repo.
+Make any modificiations to your local [mu.yml](./mu.yml) file for the stages and actions you want to model. Commit them to your repo.
 
 ```
 git commit -am "modify stages and actions" && git push
