@@ -5,11 +5,23 @@ Use Mock Pipeline to model [value stream maps](https://en.wikipedia.org/wiki/Val
 For a description of the purpose of Mock Pipeline, see [Technological Accelerants for Organizational Transformation](https://www.youtube.com/watch?v=42gDK3MDuJI&feature=youtu.be&t=1647).
 
 ## Setup
-These instructions assume you're using [AWS Cloud9](https://aws.amazon.com/cloud9/). Adapt the instructions if you're using a different IDE. 
+These instructions assume you're using [AWS Cloud9](https://aws.amazon.com/cloud9/). Adapt the instructions if you're using a different IDE.
+
+[Fork](https://help.github.com/en/articles/fork-a-repo). this repo: https://github.com/stelligent/mock-pipeline
+
+From Cloud 9, clone the newly forked repo (replacing `USERNAME` in the example.
 
 ```
+git clone https://github.com/USERNAME/mock-pipeline.git
+cd mock-pipeline
 sudo su
 sudo curl -s https://getmu.io/install.sh | sh
+```
+
+Make any modificiations to your local `mu.yml` file for the stages and actions you want to model. Commit them to your repo.
+
+```
+git commit -am "modify stages and actions" && git push
 ```
 
 To create this pipeline in your account, run: `mu pipeline up`
