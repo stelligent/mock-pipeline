@@ -29,4 +29,6 @@ To create this pipeline in your account, run: `mu pipeline up`
 
 After a few of the CloudFormation stacks have lauched, go to the [CodePipeline console](https://console.aws.amazon.com/codesuite/codepipeline/pipelines/) and look for a pipeline with something like `mock-pipeline` in its name. Select this pipeline and ensure you are properly connected to the GitHub repository you'd previosuly forked. 
 
+
+## Additional Resources
 See [Metric Details](https://github.com/stelligent/pipeline-dashboard#metric-details) for more information on release metrics such as Cycle Time, Lead Time, and MTTR. 
