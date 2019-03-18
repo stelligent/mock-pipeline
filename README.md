@@ -1,6 +1,6 @@
 # mock-pipeline
 
-You can use Mock Pipeline to model your value-stream map regardless of your tech stack, cloud provider, or data center. With Mock Pipeline, you can define your value stream map as code to visualize all the steps in your commit to production lifecycle. While it uses AWS services/tools such as [AWS CloudFormation](https://aws.amazon.com/cloudformation/) and [AWS CodePipeline](https://aws.amazon.com/codepipeline/), you can use it with any technology platform you're using. 
+You can use Mock Pipeline to model your value stream map regardless of your tech stack, cloud provider, or data center. With Mock Pipeline, you can define your value stream map as code to visualize all the steps in your commit to production lifecycle. While it uses AWS services/tools such as [AWS CloudFormation](https://aws.amazon.com/cloudformation/) and [AWS CodePipeline](https://aws.amazon.com/codepipeline/), you can use it with any technology platform you're using. 
 
 ## Cloud9
 
