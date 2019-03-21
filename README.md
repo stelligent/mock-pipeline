@@ -9,7 +9,7 @@ These instructions assume you're using [AWS Cloud9](https://aws.amazon.com/cloud
 
 [Fork](https://help.github.com/en/articles/fork-a-repo) this repo: https://github.com/stelligent/mock-pipeline
 
-From Cloud 9, clone the newly forked repo (replacing `USERNAME` in the example.
+From Cloud 9, clone the newly forked repo (replacing `USERNAME` in the example).
 
 ```
 git clone https://github.com/USERNAME/mock-pipeline.git
