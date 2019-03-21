@@ -25,7 +25,9 @@ Make any modificiations to your _local_ [mu.yml](./mu.yml#LL47) file (in your Cl
 git commit -am "modify stages and actions" && git push
 ```
 
-To create this pipeline in your account, run: `mu pipeline up`
+To create this pipeline in your account, run: `mu pipeline up -t GITHUBTOKEN`
+
+Your `GITHUBTOKEN` will look something like this: `2bdg4jdreaacc7gh7809543d4hg90EXAMPLE`. To get or generate a token go to [GitHub's Token Settings](https://github.com/settings/tokens).
 
 After a few of the CloudFormation stacks have lauched, go to the [CodePipeline console](https://console.aws.amazon.com/codesuite/codepipeline/pipelines/) and look for a pipeline with something like `mock-pipeline` in its name. Select this pipeline and ensure you are properly connected to the GitHub repository you'd previosuly forked. 
 
