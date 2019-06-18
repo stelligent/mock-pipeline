@@ -2,7 +2,7 @@
 
 Use Mock Pipeline to model [value stream maps](https://en.wikipedia.org/wiki/Value-stream_mapping) regardless of your tech stack, cloud provider, or data center. With Mock Pipeline, you can define your value stream map as code in order to visualize all the steps in your commit to production lifecycle. While it uses AWS services/tools such as [AWS CloudFormation](https://aws.amazon.com/cloudformation/) and [AWS CodePipeline](https://aws.amazon.com/codepipeline/), it can model _any_ technology platform. 
 
-For a description of the purpose of Mock Pipeline, see [Technological Accelerants for Organizational Transformation](https://www.youtube.com/watch?v=42gDK3MDuJI&feature=youtu.be&t=1647).
+For a description of the purpose of Mock Pipeline, see [Technological Accelerants for Organizational Transformation](https://www.youtube.com/watch?v=42gDK3MDuJI&feature=youtu.be&t=1647) and see [Value Stream Mapping with Mock Pipeline](https://stelligent.com/2019/04/15/value-stream-mapping-with-mock-pipeline/) for a detailed description on how to use Mock Pipeline.
 
 ## Setup
 These instructions assume you're using [AWS Cloud9](https://aws.amazon.com/cloud9/). Adapt the instructions if you're using a different IDE.
@@ -33,4 +33,7 @@ After a few of the CloudFormation stacks have launched, go to the [CodePipeline 
 
 
 ## Additional Resources
+See [Value Stream Mapping with Mock Pipeline](https://stelligent.com/2019/04/15/value-stream-mapping-with-mock-pipeline/) for a detailed description on how to use Mock Pipeline.
+
+
 See [Metric Details](https://github.com/stelligent/pipeline-dashboard#metric-details) for more information on release metrics such as Cycle Time, Lead Time, and MTTR. 
